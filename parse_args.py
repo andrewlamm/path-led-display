@@ -24,24 +24,6 @@ def parse_args():
     help="Display trains going towards NJ"
   )
 
-  # parser.add_argument(
-  #   "r",
-  #   type=int,
-  #   help="red"
-  # )
-
-  # parser.add_argument(
-  #   "g",
-  #   type=int,
-  #   help="green"
-  # )
-
-  # parser.add_argument(
-  #   "b",
-  #   type=int,
-  #   help="blue"
-  # )
-
   args = parser.parse_args()
 
   if not args.ny and not args.nj:
