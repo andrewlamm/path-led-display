@@ -140,7 +140,8 @@ def update_display_alerts(alerts_data):
     if "Elevators" in alert_message["subject"]:
       pass
     else:
-      display_alerts.append(remove_timestamp(alert_message["preMessage"]))
+      message = remove_timestamp(alert_message["preMessage"]).replace('PATHAlert:', '').replace('@', 'at').strip()
+      display_alerts.append(message)
 
   if len(display_alerts) == 0:
     if random.random() < 0.01:
