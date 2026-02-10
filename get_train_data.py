@@ -93,8 +93,12 @@ def estimate_trains(response):
               msg_arrival = isoparse(msg["lastUpdated"]).timestamp() + int(msg["secondsToArrival"])
 
               estimate_buffer = get_estimate_buffer(int(msg["secondsToArrival"]))
-              if abs(msg_arrival - estimated_arrival) <= estimate_buffer:
+              if abs(msg_arrival - estimated_arrival) <= estimate_buffer and ("stationsEstimatedFrom" not in msg or station_short_name not in msg["stationsEstimatedFrom"]):
                 if msg.get("estimated") and msg["estimated"] > delta:
+                  if "stationsEstimatedFrom" not in msg:
+                    msg["stationsEstimatedFrom"] = []
+                  msg["stationsEstimatedFrom"].append(station_short_name)
+
                   msg["estimated"] = delta
                   msg["estimatedStation"] = STATIONS[station_short_name]["name"]
                   msg["secondsToArrival"] = curr_estimated + delta
@@ -115,6 +119,7 @@ def estimate_trains(response):
                   "arrivalTimeMessage": f"Est from {STATIONS[station_short_name]['name']}",
                   "target": train["target"],
                   "lineColor": train["lineColor"],
+                  "stationsEstimatedFrom": [station_short_name],
                   "estimatedStation": STATIONS[station_short_name]["name"],
                   "estimated": delta,
                 })
