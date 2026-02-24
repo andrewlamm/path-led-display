@@ -140,7 +140,7 @@ def update_display_alerts(alerts_data):
     if "Elevators" in alert_message["subject"]:
       pass
     else:
-      message = remove_timestamp(alert_message["preMessage"]).replace('PATHAlert:', '').replace('@', 'at').strip()
+      message = remove_timestamp(alert_message["preMessage"]).replace('PATHAlert:', '').replace('@', 'at').replace('&', 'and').strip()
       display_alerts.append(message)
 
   if len(display_alerts) == 0:
