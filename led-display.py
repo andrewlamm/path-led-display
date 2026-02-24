@@ -161,9 +161,15 @@ def all_trains_stale():
       return False
   return True
 
+def remove_stale_trains():
+  global display_trains
+
+  display_trains = [train for train in display_trains if isoparse(train["lastUpdated"]).timestamp() > (datetime.datetime.now() - datetime.timedelta(seconds=STALE_SECONDS)).timestamp()]
+
 def update_loop():
   while True:
     update_data()
+    remove_stale_trains()
     print(display_trains)
     print(display_alerts)
     time.sleep(5)
