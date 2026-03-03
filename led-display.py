@@ -137,7 +137,7 @@ def update_display_alerts(alerts_data):
   display_alerts = []
   for alert in alerts_data:
     alert_message = alert["incidentMessage"]
-    if "Elevators" in alert_message["subject"]:
+    if "Elevator" in alert_message["subject"]:
       pass
     else:
       message = remove_timestamp(alert_message["preMessage"]).replace('PATHAlert:', '').replace('@', 'at').replace('&', 'and').strip()
