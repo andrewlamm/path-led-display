@@ -132,12 +132,24 @@ def update_display_alerts(alerts_data):
   def remove_timestamp(s):
     return re.sub(r'^\s*\d{1,2}(?::\d{2})?\s*(AM|PM)\s*:\s*', '', s, flags=re.IGNORECASE)
 
+  def form_variables_contains_name(alert, name):
+    for variable in alert["formVariableItems"]:
+      if name in variable["variableName"]:
+        return True
+    return False
+
   alerts_data = alerts_data["data"]
 
   display_alerts = []
   for alert in alerts_data:
     alert_message = alert["incidentMessage"]
     if "Elevator" in alert_message["subject"]:
+      pass
+    elif "Bridge & Tunnel Alert" in alert_message["subject"]:
+      pass
+    elif "Newark Airport Info-Alert" in alert_message["subject"]:
+      pass
+    elif form_variables_contains_name(alert, "PABT Incident Title"):
       pass
     else:
       message = remove_timestamp(alert_message["preMessage"]).replace('PATHAlert:', '').replace('@', 'at').replace('&', 'and').strip()
