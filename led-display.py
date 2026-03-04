@@ -132,9 +132,12 @@ def update_display_alerts(alerts_data):
   def remove_timestamp(s):
     return re.sub(r'^\s*\d{1,2}(?::\d{2})?\s*(AM|PM)\s*:\s*', '', s, flags=re.IGNORECASE)
 
-  def form_variables_contains_name(alert, name):
-    for variable in alert["formVariableItems"]:
-      if name in variable["variableName"]:
+  def form_variables_contains_name(alert_message, name):
+    if "formVariableItems" not in alert_message:
+      return False
+
+    for variable in alert_message["formVariableItems"]:
+      if "variableName" in variable and name in variable["variableName"]:
         return True
     return False
 
@@ -149,7 +152,7 @@ def update_display_alerts(alerts_data):
       pass
     elif "Newark Airport Info-Alert" in alert_message["subject"]:
       pass
-    elif form_variables_contains_name(alert, "PABT Incident Title"):
+    elif form_variables_contains_name(alert_message, "PABT General Incident"):
       pass
     else:
       message = remove_timestamp(alert_message["preMessage"]).replace('PATHAlert:', '').replace('@', 'at').replace('&', 'and').strip()
