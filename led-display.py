@@ -152,6 +152,8 @@ def update_display_alerts(alerts_data):
       pass
     elif "Newark Airport Info-Alert" in alert_message["subject"]:
       pass
+    elif "MBT Carrier Alert" in alert_message["subject"]:
+      pass
     elif form_variables_contains_name(alert_message, "PABT General Incident"):
       pass
     else:
