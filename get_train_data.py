@@ -4,7 +4,7 @@ from station_deltas import STATION_DELTAS
 import time
 
 TRAIN_DATA = 'https://www.panynj.gov/bin/portauthority/ridepath.json'
-ALERTS_DATA = 'https://www.panynj.gov/bin/portauthority/everbridge/incidents?status=All&department=Path'
+ALERTS_DATA = 'https://www.panynj.gov/bin/portauthority/alerts?agency=PATH'
 
 STATIONS = {
   'NWK': {'name': 'Newark', 'direction': 2},

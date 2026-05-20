@@ -132,32 +132,40 @@ def update_display_alerts(alerts_data):
   def remove_timestamp(s):
     return re.sub(r'^\s*\d{1,2}(?::\d{2})?\s*(AM|PM)\s*:\s*', '', s, flags=re.IGNORECASE)
 
-  def form_variables_contains_name(alert_message, name):
-    if "formVariableItems" not in alert_message:
-      return False
+  ROUTES_IN_ALERTS = [
+    "NWK-WTC",
+    "JSQ-WTC",
+    "JSQ-33",
+    "HOB-WTC",
+    "HOB-33",
+    "JSQ-33 via HOB",
+  ]
 
-    for variable in alert_message["formVariableItems"]:
-      if "variableName" in variable and name in variable["variableName"]:
-        return True
-    return False
+  seen = set()
+  filtered_alerts = []
+  for alert in alerts_data:
+    alert["routes"] = [
+      route
+      for route in ROUTES_IN_ALERTS
+      if route.lower() in alert["SentMessage"].lower()
+    ]
 
-  alerts_data = alerts_data["data"]
+    key = tuple(sorted(alert["routes"]))
+
+    if key not in seen:
+      seen.add(key)
+      filtered_alerts.append(alert)
 
   display_alerts = []
-  for alert in alerts_data:
-    alert_message = alert["incidentMessage"]
-    if "Elevator" in alert_message["subject"]:
+  for alert in filtered_alerts:
+    if len(alert["routes"]) == 0:
       pass
-    elif "Bridge & Tunnel Alert" in alert_message["subject"]:
+    elif "elevator" in alert["Subject"].lower():
       pass
-    elif "Newark Airport Info-Alert" in alert_message["subject"]:
-      pass
-    elif "MBT Carrier Alert" in alert_message["subject"]:
-      pass
-    elif form_variables_contains_name(alert_message, "PABT General Incident"):
+    elif "final" in alert["Subject"].lower():
       pass
     else:
-      message = remove_timestamp(alert_message["preMessage"]).replace('PATHAlert:', '').replace('@', 'at').replace('&', 'and').strip()
+      message = remove_timestamp(alert["SentMessage"]).replace('PATHAlert:', '').replace('@', 'at').replace('&', 'and').strip()
       display_alerts.append(message)
 
   if len(display_alerts) == 0:
