@@ -136,21 +136,21 @@ def update_display_alerts(alerts_data):
   def remove_timestamp(s):
     return re.sub(r'^\s*\d{1,2}(?::\d{2})?\s*(AM|PM)\s*:\s*', '', s, flags=re.IGNORECASE)
 
-  ROUTES_IN_ALERTS = [
-    "NWK-WTC",
-    "JSQ-WTC",
-    "JSQ-33",
-    "HOB-WTC",
-    "HOB-33",
-    "JSQ-33 via HOB",
-  ]
+  ROUTES_IN_ALERTS = {
+    "NWK-WTC": 0,
+    "JSQ-WTC": 0,
+    "JSQ-33": 1,
+    "HOB-WTC": 2,
+    "HOB-33": 3,
+    "JSQ-33 via HOB": 4,
+  }
 
   seen = set()
   filtered_alerts = []
   for alert in alerts_data:
     alert["routes"] = [
-      route
-      for route in ROUTES_IN_ALERTS
+      num
+      for route, num in ROUTES_IN_ALERTS.items()
       if route.lower() in alert["SentMessage"].lower()
     ]
 
@@ -197,10 +197,11 @@ def remove_stale_trains():
 
 def update_loop():
   while True:
+    print(f"Updating data at {datetime.datetime.now().isoformat()}", flush=True)
     update_data()
     remove_stale_trains()
-    print(display_trains)
-    print(display_alerts)
+    print(f"Trains: {display_trains}", flush=True)
+    print(f"Alerts: {display_alerts}", flush=True)
     time.sleep(5)
 
 thread = threading.Thread(target=update_loop, daemon=True)
