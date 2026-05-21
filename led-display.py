@@ -107,6 +107,10 @@ display_alerts = []
 def update_display_trains(estimated_trains):
   global display_trains
 
+  if STATION_TO_DISPLAY not in estimated_trains:
+    display_trains = []
+    return
+
   train_data = estimated_trains[STATION_TO_DISPLAY]
   arrivals = []
 
