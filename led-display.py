@@ -168,11 +168,13 @@ def update_display_alerts(alerts_data):
 
   display_alerts = []
   for alert in filtered_alerts:
-    if len(alert["routes"]) == 0:
-      pass
-    elif "elevator" in alert["Subject"].lower():
+    if "elevator" in alert["Subject"].lower():
       pass
     elif "final" in alert["Subject"].lower():
+      pass
+    elif "PATH Service Advisory - NWK B/C Platforms & Harrison WTC Bound Platform" in alert["TemplateName"]:
+      pass
+    elif "PATH - Newport - Single-Tracking Down" in alert["TemplateName"]:
       pass
     else:
       message = remove_timestamp(alert["SentMessage"]).replace('PATHAlert:', '').replace('@', 'at').replace('&', 'and').strip()
