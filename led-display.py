@@ -130,31 +130,37 @@ def update_display_trains(estimated_trains):
 
   display_trains = arrivals
 
+AT_STRINGS = {" at ", " at  ", " @ ", " @  "}
+ALERT_STATION_STRINGS = {
+  "NWK", "Newark",
+  "HAR", "Harrison",
+  "JSQ", "Journal Square",
+  "GRV", "Grove",
+  "EXP", "Exchange Place",
+  "NEW", "NWPT", "Newport",
+  "CHR", "CHRS", "Christoper",
+  "9S", "9th",
+  "14S", "14th",
+  "23S", "23rd",
+  "33S", "33rd"
+}
+COMBINED_STATION_STR = {f"{at}{station}" for at in AT_STRINGS for station in ALERT_STATION_STRINGS}
+
 def update_display_alerts(alerts_data):
   global display_alerts
 
   def remove_timestamp(s):
     return re.sub(r'^\s*\d{1,2}(?::\d{2})?\s*(AM|PM)\s*:\s*', '', s, flags=re.IGNORECASE)
 
-  ROUTES_IN_ALERTS = {
-    "NWK-WTC": 0,
-    "JSQ-WTC": 0,
-    "JSQ-33": 1,
-    "HOB-WTC": 2,
-    "HOB-33": 3,
-    "JSQ-33 via HOB": 4,
-  }
-
   seen = set()
   filtered_alerts = []
   for alert in alerts_data:
-    alert["routes"] = [
-      num
-      for route, num in ROUTES_IN_ALERTS.items()
-      if route.lower() in alert["SentMessage"].lower()
+    alert_stations = [
+      s for s in COMBINED_STATION_STR
+      if s.lower() in alert["SentMessage"].lower()
     ]
 
-    key = tuple(sorted(alert["routes"]))
+    key = (alert["TemplateName"], tuple(sorted(alert_stations)))
 
     if key not in seen:
       seen.add(key)
