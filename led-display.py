@@ -176,6 +176,10 @@ def update_display_alerts(alerts_data):
       pass
     elif "PATH - Newport - Single-Tracking Down" in alert["TemplateName"]:
       pass
+    elif "PATH - Avenue Single-Tracking Up" in alert["TemplateName"]:
+      pass
+    elif "Planned Service Advisory" in alert["TemplateName"]:
+      pass
     else:
       message = remove_timestamp(alert["SentMessage"]).replace('PATHAlert:', '').replace('@', 'at').replace('&', 'and').strip()
       display_alerts.append(message)
