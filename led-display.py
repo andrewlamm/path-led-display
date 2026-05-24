@@ -180,6 +180,8 @@ def update_display_alerts(alerts_data):
       pass
     elif "Planned Service Advisory" in alert["TemplateName"]:
       pass
+    elif "9 St and 23 St Overnight Advisory" in alert["TemplateName"]:
+      pass
     else:
       message = remove_timestamp(alert["SentMessage"]).replace('PATHAlert:', '').replace('@', 'at').replace('&', 'and').strip()
       display_alerts.append(message)
