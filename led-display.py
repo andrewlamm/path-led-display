@@ -174,9 +174,9 @@ def update_display_alerts(alerts_data):
       pass
     elif "PATH Service Advisory - NWK B/C Platforms & Harrison WTC Bound Platform" in alert["TemplateName"]:
       pass
-    elif "PATH - Newport - Single-Tracking Down" in alert["TemplateName"]:
+    elif "Single-Tracking Down" in alert["TemplateName"]:
       pass
-    elif "PATH - Avenue Single-Tracking Up" in alert["TemplateName"]:
+    elif "Single-Tracking Up" in alert["TemplateName"]:
       pass
     elif "Planned Service Advisory" in alert["TemplateName"]:
       pass
