@@ -128,13 +128,18 @@ def estimate_trains(response):
   return response_stations
 
 def get_data():
+  train_out = None
+  alerts_out = None
   try:
     train_data = get_trains()
-    alerts_data = get_alerts()
-    estimated_trains = estimate_trains(train_data)
-
-    return (estimated_trains, alerts_data)
+    train_out = estimate_trains(train_data)
   except Exception as e:
-    print(f"Error fetching data: {e}")
-    return (None, None)
+    print(f"Error fetching train data: {e}")
+
+  try:
+    alerts_out = get_alerts()
+  except Exception as e:
+    print(f"Error fetching alerts data: {e}")
+
+  return (train_out, alerts_out)
 

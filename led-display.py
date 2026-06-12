@@ -37,6 +37,7 @@ ALERT_COOLDOWN = 60
 ALERT_MIN_X_VALUE = -20
 
 STALE_SECONDS = 600
+STALE_ALERT_SECONDS = 2 * 60 * 60 # 2 hours
 
 ALERT_SCROLL_SPEED = 1.5
 
@@ -149,6 +150,10 @@ COMBINED_STATION_STR = {f"{at}{station}" for at in AT_STRINGS for station in ALE
 def update_display_alerts(alerts_data):
   global display_alerts
 
+  def to_datetime(s):
+    ms = int(re.search(r'\d+', s).group())
+    return datetime.datetime.fromtimestamp(ms / 1000, tz=datetime.timezone.utc)
+
   def remove_timestamp(s):
     return re.sub(r'^\s*\d{1,2}(?::\d{2})?\s*(AM|PM)\s*:\s*', '', s, flags=re.IGNORECASE)
 
@@ -185,8 +190,10 @@ def update_display_alerts(alerts_data):
     elif "9 St and 23 St Overnight Advisory" in alert["TemplateName"]:
       pass
     else:
-      message = remove_timestamp(alert["SentMessage"]).replace('PATHAlert:', '').replace('@', 'at').replace('&', 'and').strip()
-      display_alerts.append(message)
+      alert_time = to_datetime(alert["sentdate2"])
+      if alert_time.timestamp() > (datetime.datetime.now(tz=datetime.timezone.utc) - datetime.timedelta(seconds=STALE_ALERT_SECONDS)).timestamp():
+        message = remove_timestamp(alert["SentMessage"]).replace('PATHAlert:', '').replace('@', 'at').replace('&', 'and').strip()
+        display_alerts.append(message)
 
   if len(display_alerts) == 0:
     if random.random() < 0.01:
